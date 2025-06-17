@@ -14,6 +14,7 @@ export class ParentCommandConfig extends Subcommand {
 		registry.registerChatInputCommand((ctx) => {
 			// If you want to link commands in groups of subcommands you first need to register them in the builder context of the parent command.
 			ctx.addSubcommandGroup((sc) => sc.setName('special-role').setDescription('Manage special supporter roles for giveaways')); // Each group of subcommands must have a unique name and description and be registered like this.
+			ctx.addSubcommandGroup((sc) => sc.setName('eligible-roles').setDescription('Manage roles that are always eligible for giveaways'));
 
 			// It is necessary to call this hook and pass the builder context to register the subcommands stored in the subcommand registry in the subcommand groups of the parent command.
 			this.hooks.groups(this, ctx);

@@ -89,7 +89,7 @@ export class GiveawayAPI {
 		return config;
 	}
 
-	async updateGuildConfig(guildId: string, data: Partial<{ allowedUserIds: string; giveawayEmoji: string }>) {
+	async updateGuildConfig(guildId: string, data: Partial<{ allowedUserIds: string; giveawayEmoji: string; eligibleRoles: string }>) {
 		return prisma.guildConfig.update({ where: { guildId }, data });
 	}
 }

@@ -19,6 +19,7 @@ A modern, feature-rich Discord giveaway bot built with TypeScript and SapphireJS
 - ⭐ Supporter roles with extra entries
 - 🔒 Whitelist role requirements
 - 👥 Multiple role support (up to 5 roles)
+- ✅ **Always Eligible Roles**: Specify roles that can always participate in giveaways, regardless of other requirements (Perfect for staff perks by example)
 
 ### Management Tools
 
@@ -89,12 +90,16 @@ npm start
 
 - `/giveawaydetails` - Show detailed entry info
 - `/about` - Show bot information and commands
+- `/bot-config` - Show information about the bot's config for your server
 
 ### Configuration
 
 - `/gconfig special-role add` - Add a special supporter role
 - `/gconfig special-role remove` - Remove a special supporter role
 - `/gconfig set-reaction-emoji` - Set the entry button emoji
+- `/gconfig eligible-roles add` - Add a role that is always eligible for giveaways
+- `/gconfig eligible-roles remove` - Remove a role from the always eligible list (with autocomplete)
+- `/gconfig eligible-roles list` - List all always eligible roles
 
 ## Contributing
 

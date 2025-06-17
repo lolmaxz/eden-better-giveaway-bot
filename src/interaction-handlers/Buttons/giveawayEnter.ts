@@ -29,6 +29,18 @@ export class GiveawayEnterButtonHandler extends InteractionHandler {
 		if (!interaction.guild) {
 			return interaction.reply({ content: 'This giveaway can only be entered in a server.', ephemeral: true });
 		}
+
+		// Fetch guild config for eligibleRoles
+		const guildConfig = await this.container.giveawayAPI.getOrCreateGuildConfig(interaction.guild.id);
+		const eligibleRoles = guildConfig.eligibleRoles
+			? guildConfig.eligibleRoles
+					.split(',')
+					.map((r: string) => r.trim())
+					.filter(Boolean)
+			: [];
+		const member = interaction.member as GuildMember;
+		const hasAlwaysEligibleRole = eligibleRoles.length > 0 && member.roles.cache.some((role) => eligibleRoles.includes(role.id));
+
 		// Check if user already entered
 		const existingEntry = await this.container.giveawayAPI.getEntryByUser(giveawayId, interaction.user.id);
 		if (existingEntry) {
@@ -44,10 +56,10 @@ export class GiveawayEnterButtonHandler extends InteractionHandler {
 
 			return interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 		}
-		// Check whitelist roles
-		if (giveaway.whitelistRoles) {
+
+		// If user has an always-eligible role, skip whitelist check
+		if (!hasAlwaysEligibleRole && giveaway.whitelistRoles) {
 			const requiredRoles = giveaway.whitelistRoles.split(',');
-			const member = interaction.member as GuildMember;
 			if (!member.roles.cache.some((role) => requiredRoles.includes(role.id))) {
 				const rolesList = requiredRoles
 					.map((roleId) => {
