@@ -57,29 +57,43 @@ export class GiveawayEnterButtonHandler extends InteractionHandler {
 					.filter((role) => role !== null)
 					.join('\n');
 
-				const embed = new EmbedBuilder()
-					.setTitle('Entry Requirements')
-					.setDescription(
-						'❌ You do not have the required role(s) to enter this giveaway.\n\n' +
-							'**Required Roles for this Giveaway:**\n' +
-							`${rolesList}\n\n` +
-							'Members requires to be at least level 10 in the server in order to access giveaways. ' +
-							'Some giveaways might not require it, but most of them will.\n\n' +
-							'Any Patreon role can grant access to giveaways instantly.\n' +
-							'Depending on Patreon level, **additional entries may be granted**.\n\n' +
-							'-# More information about active cutie role here: **[How to become an Active Cutie?](https://discord.com/channels/734595073920204940/750582444377243768/1121146629433606154)**'
-					)
-					.setColor(Colors.Red)
-					.setFooter({ text: 'The Eden Apis Giveaway System' });
+				if (interaction.guild.id === '734595073920204940') {
+					const embed = new EmbedBuilder()
+						.setTitle('Entry Requirements')
+						.setDescription(
+							'❌ You do not have the required role(s) to enter this giveaway.\n\n' +
+								'**Required Roles for this Giveaway:**\n' +
+								`${rolesList}\n\n` +
+								'Members requires to be at least level 10 in the server in order to access giveaways. ' +
+								'Some giveaways might not require it, but most of them will.\n\n' +
+								'Any Patreon role can grant access to giveaways instantly.\n' +
+								'Depending on Patreon level, **additional entries may be granted**.\n\n' +
+								'-# More information about active cutie role here: **[How to become an Active Cutie?](https://discord.com/channels/734595073920204940/750582444377243768/1121146629433606154)**'
+						)
+						.setColor(Colors.Red)
+						.setFooter({ text: 'The Eden Apis Giveaway System' });
 
-				const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-					new ButtonBuilder()
-						.setCustomId('giveaway_eligibility_info')
-						.setLabel('More on how to become eligible')
-						.setStyle(ButtonStyle.Primary)
-				);
+					const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+						new ButtonBuilder()
+							.setCustomId('giveaway_eligibility_info')
+							.setLabel('More on how to become eligible')
+							.setStyle(ButtonStyle.Primary)
+					);
 
-				return interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+					return interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+				} else {
+					const embed = new EmbedBuilder()
+						.setTitle('Entry Requirements')
+						.setDescription(
+							'❌ You do not have the required role(s) to enter this giveaway.\n\n' +
+								'**Required Roles for this Giveaway:**\n' +
+								`${rolesList}\n\n` +
+								'Please contact a server administrator or check your server rules for more information on how to obtain the required roles.'
+						)
+						.setColor(Colors.Red)
+						.setFooter({ text: 'Giveaway System' });
+					return interaction.reply({ embeds: [embed], ephemeral: true });
+				}
 			}
 		}
 		// Supporter roles logic
