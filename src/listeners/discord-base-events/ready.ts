@@ -15,20 +15,6 @@ export class UserEvent extends Listener {
 
 		this.container.logger.info('Bot is ready. Ensuring guild configuration exists for each guild...');
 		// Iterate over each guild the bot is in and ensure a config exists for each.
-		this.container.client.guilds.cache.forEach(async (guild) => {
-			try {
-				// Use the helper method to get or create a guild config.
-				await this.container.exampleAPI.getOrCreateGuildConfig(
-					guild.id,
-					guild.name,
-					guild.ownerId // or guild.owner?.id if applicable
-				);
-
-				this.container.logger.info(`Ensured config for guild ${guild.id} (${guild.name})`);
-			} catch (error: any) {
-				this.container.logger.error(`Error ensuring config for guild ${guild.id}: ${error.message}`);
-			}
-		});
 	}
 
 	private printBanner() {

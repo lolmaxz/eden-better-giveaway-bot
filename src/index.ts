@@ -1,7 +1,7 @@
 import './lib/setup';
 
 import '@kaname-png/plugin-subcommands-advanced/register';
-import { LogLevel } from '@sapphire/framework';
+import { LogLevel, container } from '@sapphire/framework';
 import { GatewayIntentBits } from 'discord.js';
 import { SapphireCustomClient } from './customClient';
 
@@ -36,6 +36,12 @@ const main = async () => {
 		client.logger.info('Logging in');
 		await client.login();
 		client.logger.info('logged in');
+		// After login, for each guild, restart timers and handle missed giveaways
+		for (const [guildId] of client.guilds.cache) {
+			client.logger.info(`[GiveawayTimerManager] Initializing timers for guild ${guildId}`);
+			await container.giveawayTimerManager.handleMissedGiveaways(guildId);
+			await container.giveawayTimerManager.restartAllTimers(guildId);
+		}
 	} catch (error) {
 		client.logger.fatal(error);
 		await client.destroy();
