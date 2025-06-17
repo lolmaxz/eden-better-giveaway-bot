@@ -72,7 +72,14 @@ export class GiveawayEnterButtonHandler extends InteractionHandler {
 					.setColor(Colors.Red)
 					.setFooter({ text: 'The Eden Apis Giveaway System' });
 
-				return interaction.reply({ embeds: [embed], ephemeral: true });
+				const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+					new ButtonBuilder()
+						.setCustomId('giveaway_eligibility_info')
+						.setLabel('More on how to become eligible')
+						.setStyle(ButtonStyle.Primary)
+				);
+
+				return interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 			}
 		}
 		// Supporter roles logic
