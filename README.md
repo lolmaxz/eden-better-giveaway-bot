@@ -59,7 +59,27 @@ npm install
 DISCORD_TOKEN=your_bot_token_here
 ```
 
-### Development
+### Discord Application Setup
+
+When creating or configuring your bot in the [Discord Developer Portal](https://discord.com/developers/applications), enable the following:
+
+**Gateway Intents**
+
+| Intent | Required |
+| --- | --- |
+| Server Intents (`Guilds`) | Yes |
+| Message Content Intent | No |
+| Server Members Intent | No |
+| Presence Intent | No |
+
+This bot uses slash commands and button interactions only. It does **not** read regular chat messages, track member join/leave events, or use presence data, so no privileged intents are required.
+
+Leave all three privileged intents disabled under **Bot → Privileged Gateway Intents** unless you add custom features that need them later.
+
+**OAuth2 / Permissions**
+
+Invite the bot with permissions to send messages, embed links, attach files, and use application commands in the channels where giveaways will run.
+
 
 Run the bot in development mode with hot-reload:
 
