@@ -1,0 +1,99 @@
+Eden Giveaway Bot — move to eden-docker
+=======================================
+
+What this USB folder contains
+- Bot source + Docker files
+- SQLite database: prisma\dev.db
+- Secrets file: .env  (edit the Discord token on Linux before starting)
+
+Do not copy node_modules or dist. The Linux machine builds those inside Docker.
+
+
+ON THIS WINDOWS PC (already done)
+---------------------------------
+1. Docker files were added and the image was tested on Windows Docker Desktop.
+2. The bot logged in as "Eden - Giveaway Bot", imported prisma/dev.db, applied
+   Prisma migrations, and registered slash commands.
+3. The local Windows container, volume, and image were removed so Discord is
+   not still connected from this machine.
+4. This folder was copied to the USB key (J:\giveaway-bot).
+
+
+TAKE THE USB TO THE LINUX MACHINE
+---------------------------------
+5. Eject the USB key safely on Windows, plug it into eden-docker.
+6. On Linux, the USB is usually already mounted at /mnt/usb.
+   If it is empty, find the device and mount it:
+
+     lsblk
+     sudo mkdir -p /mnt/usb
+     sudo mount /dev/sdX1 /mnt/usb
+
+   Replace sdX1 with the USB partition from lsblk (often sdb1 / sdc1).
+
+7. Copy the bot into the same layout as other Discord bots on this host:
+
+     sudo mkdir -p /srv/docker/giveaway-bot
+     sudo cp -a /mnt/usb/giveaway-bot/. /srv/docker/giveaway-bot/
+     sudo chown -R "$USER":"$USER" /srv/docker/giveaway-bot
+     cd /srv/docker/giveaway-bot
+     ls -la
+     ls -la prisma/dev.db .env Dockerfile docker-compose.yml
+
+   Confirm those four files exist before continuing.
+
+
+EDIT THE DISCORD TOKEN (required before first start)
+----------------------------------------------------
+8. Open the env file on the Linux machine and replace DISCORD_TOKEN with the
+   new bot token. Leave DATABASE_URL as-is; Docker Compose overrides it to
+   the SQLite volume path.
+
+     nano /srv/docker/giveaway-bot/.env
+
+   Change only:
+
+     DISCORD_TOKEN=PASTE_THE_NEW_TOKEN_HERE
+
+   Save and exit (Ctrl+O, Enter, Ctrl+X in nano).
+
+   The old Windows token must not stay in this file if you want the new
+   Discord application to run. Do not start the container until this is saved.
+
+
+THEN MESSAGE CURSOR
+-------------------
+9. After the files are on /srv/docker/giveaway-bot and .env has the new token,
+   tell Cursor to create the Eden Docker Manager entry. Do not run
+   `docker compose up` until that is done (or until Cursor says you can).
+
+
+AFTER THE MANAGER ENTRY EXISTS
+------------------------------
+10. Build and start:
+
+      cd /srv/docker/giveaway-bot
+      docker compose up -d --build
+      docker compose logs -f
+
+    Success looks like:
+      - Importing existing SQLite database into Docker volume
+      - No pending migrations to apply
+      - Logged in successfully as <bot name>
+      - Bot is ready
+
+    Stop following logs with Ctrl+C (the container keeps running).
+
+11. Useful commands:
+
+      cd /srv/docker/giveaway-bot && docker compose ps
+      cd /srv/docker/giveaway-bot && docker compose logs -f
+      cd /srv/docker/giveaway-bot && docker compose restart
+      cd /srv/docker/giveaway-bot && docker compose down
+
+
+Notes
+- SQLite lives in Docker volume giveaway-bot_giveaway-data at /data/dev.db.
+  prisma/dev.db on disk is only the first-run seed; later data is in the volume.
+- This bot talks outbound to Discord only. No host ports and no Traefik route.
+- Target host: eden-docker (LAN 192.168.0.148). USB backups mount: /mnt/usb.

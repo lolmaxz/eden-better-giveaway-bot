@@ -21,7 +21,7 @@ const main = async () => {
 	try {
 		client.logger.info('Logging in');
 		await client.login();
-		client.logger.info(`Logged in successfully as ${client.user!.username}`);
+		client.logger.info(`Logged in successfully as ${client.user!.tag}`);
 		// After login, for each guild, restart timers and handle missed giveaways
 		for (const [guildId] of client.guilds.cache) {
 			client.logger.info(`[GiveawayTimerManager] Initializing timers for guild ${guildId}`);
